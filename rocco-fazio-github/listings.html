@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listings | Rocco Fazio · Pittsburgh Real Estate</title>
+<meta name="description" content="Active and recently sold properties across Pittsburgh and the North Hills.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ivory:#F4EFE6; --paper:#FAF7F0;
+  --charcoal:#1C1A16; --ink:#2B2823;
+  --bronze:#9C7B4F; --bronze-dark:#7A5F3D;
+  --stone:#8A8377; --line:#D9D1C2; --line-soft:#E8E1D2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Outfit',sans-serif;font-weight:300;background:var(--ivory);color:var(--ink);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:400;line-height:1.1;color:var(--charcoal)}
+.eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:var(--bronze)}
+.container{max-width:1320px;margin:0 auto;padding:0 32px}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:14px 32px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(244,239,230,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:.18em}
+.nav-logo span{color:var(--bronze);font-style:italic}
+.nav-links{display:flex;gap:38px;align-items:center}
+.nav-links a{
+  font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  padding:6px 0;transition:color .3s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--bronze)}
+.nav-cta{padding:10px 22px;border:1px solid var(--charcoal);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;transition:all .3s}
+.nav-cta:hover{background:var(--charcoal);color:var(--ivory)}
+.nav-toggle{display:none}
+
+/* PAGE HEAD */
+.page-head{
+  padding:160px 0 60px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper);
+  position:relative;
+  overflow:hidden;
+}
+.page-head::before{
+  content:'';position:absolute;top:50%;right:-80px;width:300px;height:300px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(156,123,79,.08) 0%,transparent 70%);
+  transform:translateY(-50%);pointer-events:none;
+}
+.page-head .container{position:relative}
+.page-head h1{
+  font-size:clamp(48px,7vw,96px);
+  font-weight:300;letter-spacing:-.01em;margin:16px 0 24px;
+}
+.page-head h1 em{font-style:italic;color:var(--bronze);font-weight:400}
+.page-head p{max-width:54ch;font-size:17px;color:var(--ink)}
+
+/* FILTER BAR */
+.filters{
+  background:var(--ivory);
+  border-bottom:1px solid var(--line-soft);
+  padding:24px 0;
+  position:sticky;top:62px;z-index:50;
+}
+.filters-inner{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.filter-tabs{display:flex;gap:6px;border:1px solid var(--line);padding:4px}
+.filter-tab{
+  padding:10px 22px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  color:var(--stone);transition:all .25s;
+}
+.filter-tab.active{background:var(--charcoal);color:var(--ivory)}
+.filter-tab:hover:not(.active){color:var(--charcoal)}
+.filter-controls{display:flex;gap:12px;align-items:center}
+.filter-select{
+  appearance:none;
+  padding:11px 36px 11px 16px;
+  background:transparent;
+  border:1px solid var(--line);
+  font-family:'Outfit',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  color:var(--charcoal);cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%239C7B4F' stroke-width='1.2' fill='none'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;
+}
+.filter-select:hover{border-color:var(--bronze)}
+.filter-count{font-size:13px;color:var(--stone);letter-spacing:.05em}
+.filter-count strong{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--bronze);font-weight:500;font-size:18px}
+
+/* LISTINGS */
+.listings-page{padding:80px 0 120px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:48px 32px;
+}
+.property{cursor:pointer;transition:transform .5s ease}
+.property.hide{display:none}
+.property:hover{transform:translateY(-6px)}
+.property-img{
+  aspect-ratio:4/3;
+  background-size:cover;background-position:center;
+  margin-bottom:20px;position:relative;overflow:hidden;
+}
+.property-img-inner{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .8s ease}
+.property:hover .property-img-inner{transform:scale(1.05)}
+.property-tag{
+  position:absolute;top:16px;left:16px;
+  background:var(--ivory);color:var(--charcoal);
+  padding:6px 14px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;z-index:2;
+}
+.property-tag.sold{background:var(--bronze);color:var(--ivory)}
+.property-tag.new{background:var(--charcoal);color:var(--ivory)}
+.property-address{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:6px;color:var(--charcoal)}
+.property-loc{font-size:13px;color:var(--stone);margin-bottom:14px;letter-spacing:.04em}
+.property-meta{display:flex;gap:18px;font-size:12px;color:var(--ink);padding-bottom:14px;border-bottom:1px solid var(--line-soft);letter-spacing:.06em}
+.property-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;color:var(--bronze);margin-top:14px}
+
+.empty{
+  grid-column:1/-1;text-align:center;padding:80px 0;
+  font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--stone);font-style:italic;
+}
+
+/* CTA */
+.cta-band{
+  background:var(--charcoal);color:var(--ivory);
+  padding:100px 0;text-align:center;position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:-150px;left:-150px;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(156,123,79,.2) 0%,transparent 70%);pointer-events:none;
+}
+.cta-band h2{color:var(--ivory);font-size:clamp(40px,5vw,60px);font-weight:300;margin-bottom:20px;position:relative}
+.cta-band h2 em{font-style:italic;color:var(--bronze)}
+.cta-band p{color:rgba(244,239,230,.7);max-width:50ch;margin:0 auto 36px;font-size:16px;position:relative}
+.cta-band .btn-group{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 30px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;
+  transition:all .35s ease;border:1px solid transparent;
+}
+.btn-bronze{background:var(--bronze);color:var(--ivory)}
+.btn-bronze:hover{background:var(--ivory);color:var(--charcoal)}
+.btn-light{border-color:var(--ivory);color:var(--ivory)}
+.btn-light:hover{background:var(--ivory);color:var(--charcoal)}
+.arrow{transition:transform .3s}
+.btn:hover .arrow{transform:translateX(4px)}
+
+/* FOOTER */
+.footer{background:var(--charcoal);color:var(--ivory);padding:80px 0 32px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:64px}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:28px;letter-spacing:.18em;margin-bottom:20px}
+.footer-brand span{color:var(--bronze);font-style:italic}
+.footer-tag{color:rgba(244,239,230,.6);font-size:14px;line-height:1.6;max-width:36ch}
+.footer h4{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--bronze);margin-bottom:24px;font-family:'Outfit',sans-serif;font-weight:500}
+.footer ul{list-style:none}
+.footer ul li{margin-bottom:12px}
+.footer ul a{color:rgba(244,239,230,.7);font-size:14px}
+.footer ul a:hover{color:var(--bronze)}
+.footer-social{display:flex;gap:14px;margin-top:8px}
+.footer-social a{width:36px;height:36px;border:1px solid rgba(244,239,230,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.footer-social a:hover{border-color:var(--bronze);background:var(--bronze)}
+.footer-social svg{width:14px;height:14px;fill:var(--ivory)}
+.footer-bottom{padding-top:32px;border-top:1px solid rgba(244,239,230,.1);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-bottom p{font-size:12px;color:rgba(244,239,230,.4)}
+.footer-bottom a{color:rgba(244,239,230,.5);font-size:12px;margin-left:24px}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .nav{padding:14px 24px}
+  .nav-links{display:none;position:fixed;top:62px;left:0;right:0;flex-direction:column;background:var(--ivory);padding:32px;gap:24px;border-bottom:1px solid var(--line)}
+  .nav-links.open{display:flex}
+  .nav-toggle{display:block;width:28px;height:20px;position:relative}
+  .nav-toggle span{position:absolute;left:0;right:0;height:1px;background:var(--charcoal);transition:transform .3s,opacity .3s}
+  .nav-toggle span:nth-child(1){top:4px}
+  .nav-toggle span:nth-child(2){top:50%}
+  .nav-toggle span:nth-child(3){bottom:4px}
+  .nav-cta{display:none}
+  .container{padding:0 24px}
+  .page-head{padding:120px 0 50px}
+  .grid{grid-template-columns:1fr;gap:40px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .filters{top:58px}
+  .filters-inner{gap:14px}
+  .filter-tabs{order:1;width:100%;justify-content:center}
+  .filter-controls{order:2}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">ROCCO<span>·</span>FAZIO</a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html#buyers">Buyers</a>
+    <a href="index.html#sellers">Sellers</a>
+    <a href="listings.html" class="active">Listings</a>
+    <a href="index.html#tours">Tours</a>
+    <a href="index.html#join">Join the Team</a>
+    <a href="index.html#about">About</a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Let's Connect</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-head">
+  <div class="container">
+    <span class="eyebrow">Listings & Deals</span>
+    <h1>Currently <em>on the market.</em></h1>
+    <p>A curated look at active listings, fresh deals, and recently closed properties across Pittsburgh and the North Hills suburbs.</p>
+  </div>
+</section>
+
+<div class="filters">
+  <div class="container filters-inner">
+    <div class="filter-tabs" id="tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="sale">For Sale</button>
+      <button class="filter-tab" data-filter="new">New</button>
+    </div>
+    <div class="filter-controls">
+      <select class="filter-select" id="priceFilter">
+        <option value="all">Any Price</option>
+        <option value="0-500">Under $500k</option>
+        <option value="500-1000">$500k – $1M</option>
+        <option value="1000-2000">$1M – $2M</option>
+        <option value="2000-99999">$2M+</option>
+      </select>
+      <select class="filter-select" id="sortFilter">
+        <option value="featured">Sort: Featured</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="price-asc">Price: Low → High</option>
+      </select>
+      <span class="filter-count"><strong id="count">4</strong> properties</span>
+    </div>
+  </div>
+</div>
+
+<section class="listings-page">
+  <div class="container">
+    <div class="grid" id="grid">
+
+      <div class="property reveal" data-status="sale" data-price="2500000">
+        <div class="property-img"><div class="property-img-inner" style="background-image:url('assets/maitland-exterior.jpeg')"></div><span class="property-tag">For Sale</span></div>
+        <div class="property-address">Maitland Estate</div>
+        <div class="property-loc">Pittsburgh's North Hills · Private Setting</div>
+        <div class="property-meta"><span>Custom Home</span><span>·</span><span>Detached Garage</span><span>·</span><span>Acreage</span></div>
+        <div class="property-price">Price Upon Request</div>
+      </div>
+
+      <div class="property reveal" data-status="sale" data-price="1850000">
+        <div class="property-img"><div class="property-img-inner" style="background-image:url('assets/mcaleer-aerial.jpeg')"></div><span class="property-tag">For Sale</span></div>
+        <div class="property-address">2265 McAleer Rd</div>
+        <div class="property-loc">Wexford, PA · Historic Brick Estate</div>
+        <div class="property-meta"><span>Brick Estate</span><span>·</span><span>Pond &amp; Gardens</span><span>·</span><span>Carriage House</span></div>
+        <div class="property-price">Price Upon Request</div>
+      </div>
+
+      <div class="property reveal" data-status="new" data-price="725000">
+        <div class="property-img"><div class="property-img-inner" style="background-image:url('assets/highland-ave.jpeg')"></div><span class="property-tag new">New</span></div>
+        <div class="property-address">362 S Highland Ave</div>
+        <div class="property-loc">Pittsburgh, PA · East End Victorian</div>
+        <div class="property-meta"><span>Victorian</span><span>·</span><span>Brick</span><span>·</span><span>Multi-Unit Potential</span></div>
+        <div class="property-price">Price Upon Request</div>
+      </div>
+
+      <div class="property reveal" data-status="new" data-price="850000">
+        <div class="property-img"><div class="property-img-inner" style="background-image:url('assets/negley-ave.jpeg')"></div><span class="property-tag new">New</span></div>
+        <div class="property-address">208 S Negley Ave</div>
+        <div class="property-loc">Pittsburgh, PA · Shadyside Stone</div>
+        <div class="property-meta"><span>Historic Stone</span><span>·</span><span>Columned Porch</span><span>·</span><span>Walk to Everything</span></div>
+        <div class="property-price">Price Upon Request</div>
+      </div>
+
+      <div class="empty" id="empty" style="display:none;">No properties match your filters.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <span class="eyebrow" style="color:var(--bronze);">Don't see it here?</span>
+    <h2 style="margin-top:20px;">Let's find your <em>next address.</em></h2>
+    <p>The best deals don't always hit the MLS. Tell me what you're looking for and I'll send what's actually out there — including off-market opportunities.</p>
+    <div class="btn-group">
+      <a href="index.html#buyers" class="btn btn-bronze">Start Buyer Intake <span class="arrow">→</span></a>
+      <a href="index.html#sellers" class="btn btn-light">Get Home Valuation</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">ROCCO<span>·</span>FAZIO</div>
+        <p class="footer-tag">Pittsburgh's North Hills real estate, handled with strategy, care, and an honest point of view.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3 .01 4.1.06 1 .05 1.7.2 2.3.4.6.2 1.2.5 1.7 1s.8 1.1 1 1.7c.2.6.4 1.3.4 2.3.05 1.1.06 1.4.06 4.1s-.01 3-.06 4.1c-.05 1-.2 1.7-.4 2.3-.2.6-.5 1.2-1 1.7s-1.1.8-1.7 1c-.6.2-1.3.4-2.3.4-1.1.05-1.4.06-4.1.06s-3-.01-4.1-.06c-1-.05-1.7-.2-2.3-.4-.6-.2-1.2-.5-1.7-1s-.8-1.1-1-1.7c-.2-.6-.4-1.3-.4-2.3C2.01 15 2 14.7 2 12s.01-3 .06-4.1c.05-1 .2-1.7.4-2.3.2-.6.5-1.2 1-1.7s1.1-.8 1.7-1c.6-.2 1.3-.4 2.3-.4C9 2.01 9.3 2 12 2zm0 3a5.2 5.2 0 110 10.4 5.2 5.2 0 010-10.4zm0 1.8a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm5.4-2.7a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.7c0-.9.3-1.5 1.6-1.5h1.7v-3c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1V9.8H7.6V13h2.7v8h3.2z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M6.5 8.5a2 2 0 110-4 2 2 0 010 4zM4.7 9.8h3.6V20H4.7V9.8zM10.4 9.8h3.4v1.4c.5-.8 1.7-1.7 3.5-1.7 3.7 0 4.4 2.4 4.4 5.6V20h-3.6v-4.3c0-1 0-2.3-1.4-2.3s-1.7 1.1-1.7 2.3V20h-3.6V9.8z"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Buyers</h4><ul>
+        <li><a href="index.html#buyers">Start Your Search</a></li>
+        <li><a href="listings.html">All Listings</a></li>
+        <li><a href="#">Lender Resources</a></li>
+        <li><a href="#">School Districts</a></li>
+      </ul></div>
+      <div><h4>Sellers</h4><ul>
+        <li><a href="index.html#sellers">Home Valuation</a></li>
+        <li><a href="index.html#sellers">Sell with Me</a></li>
+        <li><a href="#">Market Reports</a></li>
+        <li><a href="listings.html">Recently Sold</a></li>
+      </ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="index.html#about">Meet Rocco</a></li>
+        <li><a href="index.html#join">Join the Team</a></li>
+        <li><a href="#">Testimonials</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Rocco Fazio · Licensed Realtor® · Compass</p>
+      <div><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Fair Housing</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.getElementById('navToggle');
+const navLinks  = document.getElementById('navLinks');
+navToggle.addEventListener('click', ()=>{ navLinks.classList.toggle('open'); navToggle.classList.toggle('open'); });
+
+const io = new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const props = Array.from(document.querySelectorAll('.property'));
+const tabs = document.querySelectorAll('.filter-tab');
+const priceF = document.getElementById('priceFilter');
+const sortF  = document.getElementById('sortFilter');
+const count  = document.getElementById('count');
+const empty  = document.getElementById('empty');
+const grid   = document.getElementById('grid');
+
+let activeStatus = 'all';
+
+function apply(){
+  const [pmin,pmax] = priceF.value === 'all' ? [0, Infinity] : priceF.value.split('-').map(n => +n * 1000);
+  let visible = 0;
+  props.forEach(p=>{
+    const status = p.dataset.status;
+    const price  = +p.dataset.price;
+    const ok = (activeStatus === 'all' || status === activeStatus) && price >= pmin && price <= pmax;
+    p.classList.toggle('hide', !ok);
+    if (ok) visible++;
+  });
+  count.textContent = visible;
+  empty.style.display = visible ? 'none' : 'block';
+
+  // sort
+  const sort = sortF.value;
+  const sorted = [...props].sort((a,b)=>{
+    if (sort === 'price-desc') return +b.dataset.price - +a.dataset.price;
+    if (sort === 'price-asc')  return +a.dataset.price - +b.dataset.price;
+    return 0;
+  });
+  if (sort !== 'featured') sorted.forEach(el => grid.appendChild(el));
+}
+
+tabs.forEach(t => t.addEventListener('click', ()=>{
+  tabs.forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  activeStatus = t.dataset.filter;
+  apply();
+}));
+priceF.addEventListener('change', apply);
+sortF.addEventListener('change', apply);
+</script>
+</body>
+</html>
