@@ -1,5 +1,5 @@
 [build]
-  publish = "."
+  publish = "rooco-fazio-github"
 
 # Long cache for static assets
 [[headers]]
